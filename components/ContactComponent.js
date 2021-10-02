@@ -3,7 +3,7 @@ import { ScrollView } from 'react-native';
 import { Text, Card } from 'react-native-elements';
 
 
-export class Contact extends Component {
+class Contact extends Component {
 
     static navigationOptions = { //screen title About in nav options
         title: 'Contact Us'
@@ -12,7 +12,7 @@ export class Contact extends Component {
     render() {
         return (
             <ScrollView>
-                <Card FeaturedTitle="Contact Information" wrapperStyle={{margin: 20}}>
+                <Card title="Contact Us" wrapperStyle={{margin: 20}}>
                     <Text>1 Nucamp Way</Text>
                     <Text>Seattle, WA 98001</Text>
                     <Text style={{marginBottom: 10}}>U.S.A.</Text>

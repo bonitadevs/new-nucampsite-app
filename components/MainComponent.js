@@ -49,7 +49,7 @@ const HomeNavigator = createStackNavigator(
 
 const AboutNavigator = createStackNavigator(
     {
-        About: { screen: About }
+        About : { screen: About }
     },
     {
         defaultNavigationOptions: {
