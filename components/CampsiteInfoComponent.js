@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView, FlatList } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
-import { CAMPSITES } from '../shared/campsites'; //imported state data
-import { COMMENTS } from '../shared/comments';
-//imported state data
+import {connect} from 'react-redux';
+import {baseUrl} from '../shared/baseUrl';
+
+const mapStateToProps = state => {
+    return {
+        campsites: state.campsites,
+        comments: state.comments
+}; //mapStateToProps tell the redux store which props of the state data is needed for this particular component. We only need the campsites and comments data. 
+};
 
 function RenderCampsite(props) {
 
@@ -13,7 +19,7 @@ function RenderCampsite(props) {
         return (
             <Card
                 featuredTitle={campsite.name}
-                image={require('./images/react-lake.jpg')}
+                image={{uri: baseUrl + campsite.image}}
             >
                 <Text style={{margin: 10}}>
                     {campsite.description}
@@ -60,8 +66,6 @@ class CampsiteInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            campsites: CAMPSITES,
-            comments: COMMENTS, //added comments array to local component
             favorite: false //temporary store of favorite campsite data
         };
     }
@@ -76,8 +80,8 @@ class CampsiteInfo extends Component {
 
     render() {
         const campsiteId = this.props.navigation.getParam('campsiteId'); //to receive parameter of Campsite ID
-        const campsite = this.state.campsites.filter(campsite => campsite.id === campsiteId)[0]; //pull out campsite info with filter index of [0]
-        const comments = this.state.comments.filter(comment => comment.campsiteId === campsiteId); //filtered comment we want to render into a new array called comments
+        const campsite = this.props.campsites.campsites.filter(campsite => campsite.id === campsiteId)[0]; //pull out campsite info with filter index of [0]
+        const comments = this.props.comments.comments.filter(comment => comment.campsiteId === campsiteId); //filtered comment we want to render into a new array called comments
         return (
             <ScrollView>
                 <RenderCampsite campsite={campsite}
@@ -91,4 +95,4 @@ class CampsiteInfo extends Component {
     }
 }
 
-export default CampsiteInfo;
+export default connect (mapStateToProps)(CampsiteInfo);

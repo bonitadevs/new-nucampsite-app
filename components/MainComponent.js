@@ -11,6 +11,17 @@ import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
 import { createAppContainer } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import SafeAreaView from 'react-native-safe-area-view';
+import { connect } from 'react-redux';
+import { fetchCampsites, fetchComments, fetchPromotions,
+    fetchPartners } from '../redux/ActionCreators';
+
+const mapDispatchToProps = {
+    fetchCampsites,
+    fetchComments,
+    fetchPromotions,
+    fetchPartners
+}; //action creators we will use to dispatch props, allows us to use the action creators as props. These creators have been Thunk'ed
+    
 
 //createStackNavigator is a function that requires one function. It lists which components will be available for the stack.
 const DirectoryNavigator = createStackNavigator(
@@ -196,6 +207,14 @@ const AppNavigator = createAppContainer(MainNavigator) //MainNavigator is the to
 
 //will return an app component to tie top level navigator to top level environment. Always wrap top level nav with AppNavigator 
 class Main extends Component {
+
+        componentDidMount() {
+            this.props.fetchCampsites();
+            this.props.fetchComments();
+            this.props.fetchPromotions();
+            this.props.fetchPartners();
+        }
+    
     render() {
         return (
             <View style={{
@@ -238,7 +257,7 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Main;
+export default connect(null, mapDispatchToProps)(Main);
 
 //campsites data was moved to Directory component
 //Navigator will handle the routing to the directory site so remove event handler

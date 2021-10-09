@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import { FlatList } from 'react-native';
-import { ListItem } from 'react-native-elements';
-import { CAMPSITES } from '../shared/campsites';
+import { View, FlatList } from 'react-native';
+import { Tile } from 'react-native-elements';
+import {connect} from 'react-redux';
+import {baseUrl} from '../shared/baseUrl';
+import Loading from './LoadingComponent';
+
+const mapStateToProps = state => {
+    return {
+        campsites: state.campsites,
+    }; //mapStateToProps tell the redux store which props of the state data is needed for this particular component. We only need the campsites data. 
+};
 
 class Directory extends Component { //updated to class comp to store state 
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            campsites: CAMPSITES
-        }; //added campsite data to the local state
-    }
 
     static navigationOptions = {
         title: 'Directory' //configured text for the title , becomes a navigation option
@@ -21,18 +22,29 @@ class Directory extends Component { //updated to class comp to store state
         //navigate prop routes user to the campsite when they select it
         const renderDirectoryItem = ({item}) => {
             return (
-                <ListItem
+                <Tile
                     title={item.name}
-                    subtitle={item.description}
+                    caption={item.description}
+                    featured
                     onPress={() => navigate('CampsiteInfo', { campsiteId: item.id })}
-                    leftAvatar={{ source: require('./images/react-lake.jpg')}}
+                    imageSrc={{uri: baseUrl + item.image}}
                 />
             );
         };
+        if (this.props.campsites.isLoading) {
+            return <Loading />;
+        }
+        if (this.props.campsites.errMess) {
+            return (
+                <View>
+                    <Text>{this.props.campsites.errMess}</Text>
+                </View>
+            );
+        }
 
         return (
             <FlatList
-                data={this.state.campsites}
+                data={this.props.campsites.campsites}
                 renderItem={renderDirectoryItem}
                 keyExtractor={item => item.id.toString()}
             />
@@ -40,4 +52,4 @@ class Directory extends Component { //updated to class comp to store state
     }
 }
 
-export default Directory;
+export default connect(mapStateToProps)(Directory);
