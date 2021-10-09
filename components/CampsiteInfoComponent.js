@@ -3,13 +3,19 @@ import { Text, View, ScrollView, FlatList } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
 import {connect} from 'react-redux';
 import {baseUrl} from '../shared/baseUrl';
+import { postFavorite } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
     return {
         campsites: state.campsites,
-        comments: state.comments
-}; //mapStateToProps tell the redux store which props of the state data is needed for this particular component. We only need the campsites and comments data. 
+        comments: state.comments,
+        favorites: state.favorites
+}; //mapStateToProps tell the redux store which props of the state data is needed for this particular component. We only need the campsites, favorites and comments data. 
 };
+
+const mapDispatchToProps = {
+    postFavorite: campsiteId => (postFavorite(campsiteId))
+}; //to pass in the post favorite action creator 
 
 function RenderCampsite(props) {
 
@@ -63,15 +69,8 @@ function RenderComments({comments}) {
 }
 class CampsiteInfo extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            favorite: false //temporary store of favorite campsite data
-        };
-    }
-
-    markFavorite() {
-        this.setState({favorite: true});
+    markFavorite(campsiteId) {
+        this.props.postFavorite(campsiteId);
     }//eventHandle that toggles fav prop to true. 
 
     static navigationOptions = { 
@@ -85,8 +84,8 @@ class CampsiteInfo extends Component {
         return (
             <ScrollView>
                 <RenderCampsite campsite={campsite}
-                    favorite={this.state.favorite}
-                    markFavorite={() => this.markFavorite()}
+                    favorite={this.props.favorites.includes(campsiteId)}
+                    markFavorite={() => this.markFavorite(campsiteId)}
                 />
                 <RenderComments comments={comments} /> 
                 {/* pass comments array into the RenderComments comp */}
@@ -95,4 +94,10 @@ class CampsiteInfo extends Component {
     }
 }
 
-export default connect (mapStateToProps)(CampsiteInfo);
+export default connect(mapStateToProps, mapDispatchToProps)(CampsiteInfo);
+
+
+//you can remove arrow function in mapDispatchToProps
+
+//if the key and value are the same, you can remove the value or just pass the value
+
