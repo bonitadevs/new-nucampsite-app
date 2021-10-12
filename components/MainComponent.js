@@ -261,7 +261,6 @@ class Main extends Component {
                 paddingTop: Platform.OS === 'ios' ? 0 : Constants.statusBarHeight //IOS fix, Checks if the Platform is ios. 
             }}>
                 <AppNavigator /> 
-                {/* contains screens for directory and campsite components */}
             </View>
         );
     }

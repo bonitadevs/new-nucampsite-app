@@ -12,3 +12,4 @@ export default function App() {
         </Provider> //gives main component and other child components access to the store
     );
 }
+
