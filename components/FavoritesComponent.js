@@ -54,7 +54,7 @@ class Favorites extends Component {
                                             onPress: () => this.props.deleteFavorite(item.id)
                                         },
                                     ],
-                                    { cancelable: false }
+                                    { cancelable: false } //forces user to press cancel or okay to close the alert box
                                 )
                             }
                         >
