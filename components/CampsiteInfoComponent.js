@@ -34,6 +34,8 @@ const mapDispatchToProps = {
     const recognizeDrag = ({dx}) => (dx < -200) ? true : false;
     //dx distance of a gesture across the x axis. This will recognize a horizontal drag less than -200 pixels across the screen
 
+    const recognizeComment = ({dx}) => (dx > 200) ? true : false;
+
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
         onPanResponderGrant: () => {
@@ -60,6 +62,8 @@ const mapDispatchToProps = {
                     ],
                     { cancelable: false }
                 );
+            }else if (recognizeComment(gestureState)) {
+                props.onShowModal();
             }
             return true;
         }
@@ -108,6 +112,7 @@ const mapDispatchToProps = {
 }
 
 function RenderComments({comments}) {
+    
 
     const renderCommentItem = ({item}) => {
         return (
